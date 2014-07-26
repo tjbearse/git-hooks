@@ -1,0 +1,21 @@
+#! bin/bash
+# 
+# pre-commit
+#
+# run by git before commits
+# lints python files
+#
+
+# stash all non staged changes
+git stash -u --keep-index -q
+
+pyfiles=$(git ls-files | grep ".py$");
+
+pep8 $pyfiles
+return=$?
+
+git reset --hard -q
+
+git stash pop --quiet --index
+
+exit $return
